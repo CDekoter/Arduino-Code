@@ -1,0 +1,118 @@
+// Initializing the pins for OUTPUTS, defining variables
+
+int dix = 3;
+int stex = 4;
+int diy = 5;
+int stey = 6;
+int dir = 7;
+int ster = 8; 
+int sped = 3; 
+int x ; 
+int y ;
+int r ;
+int sten ;
+int gcsx;
+int gcsy ;
+// vector fail lol
+// Initiating variables, output pins.
+
+void setup() {
+  // put your setup code here, to run once:
+  pinMode(dix, OUTPUT);
+  pinMode(stex, OUTPUT);
+  pinMode(diy, OUTPUT);
+  pinMode(stey, OUTPUT);
+  pinMode(dir, OUTPUT);
+  pinMode(ster, OUTPUT);
+
+}
+
+void loop() {
+  xrun(800, 1);
+  yrun(200, 1);
+  delay(500);
+  xrun(-800, 1);
+  yrun(-200, 1);
+  delay(500);
+}
+
+  void xrun(int stexn, int ms) {
+    if (ms == 1){
+      digitalWrite(13, HIGH);
+    }
+    if ( 0 < stexn){
+    digitalWrite(dix, HIGH); 
+    } 
+    if (0 > stexn){
+       digitalWrite(dix, LOW);
+      }
+    while (x < abs(stexn)){
+      digitalWrite(stex, HIGH); 
+      delay(sped);
+      digitalWrite(stex, LOW);
+      delay(sped);
+      x++;
+    }
+    x = 0;
+    gcsx += stexn ;
+    
+}
+
+ void yrun(int steyn, int ms) {
+    if (ms == 1){
+      digitalWrite(13, HIGH);
+    }
+    if ( 0 < steyn){
+    digitalWrite(diy, HIGH); 
+    } 
+    if (0 > steyn){
+       digitalWrite(diy, LOW);
+      }
+    while (y < abs(steyn)){
+      digitalWrite(stey, HIGH); 
+      delay(sped);
+      digitalWrite(stey, LOW);
+      delay(sped);
+      y++ ;
+    }
+    y = 0;
+    gcsy += steyn ;
+}
+
+void rrun(int stern) {
+    if ( 0 < stern){
+    digitalWrite(dir, HIGH); 
+    } 
+    if (0 > stern){
+       digitalWrite(dir, LOW);
+      }
+    while (r < abs(stern)){
+      digitalWrite(ster, HIGH); 
+      delay(sped);
+      digitalWrite(ster, LOW);
+      delay(sped);
+      r++ ;
+    }
+    r = 0 ;
+}
+
+  void rectangle(int x, int y, int sped) {
+    xrun(x, 1);
+    yrun(y, 1);
+    xrun(-x, 1);
+    yrun(-y, 1);
+}
+
+  void line(int x, int y, int sped) { 
+    int rat = x / (y + 1);
+
+    for (int lin; lin < rat; lin++){
+      xrun(rat, 1);
+      yrun(1, 1);
+    }
+    gcsx += x;
+    gcsy += y;
+  }
+// meh, idk how it works when the rat is not an integer
+// should have a microstepping mode
+
