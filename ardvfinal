@@ -1,0 +1,186 @@
+// Initializing the pins for OUTPUTS, defining variables
+
+int dix = 3;
+int stex = 4;
+int diy = 5;
+int stey = 6;
+int dir = 7;
+int ster = 8; 
+int sped = 500;
+int stern ; 
+int x ; 
+int y ;
+int r ;
+int lin ;
+int rat ;
+int gcsx = 0;
+int gcsy = 0  ;
+int overx = 8000 ;
+int overy = 1000 ;
+// CHECK THESE! 
+// vector fail lol
+// Initiating variables, output pins.
+
+void setup() {
+  // put your setup code here, to run once:
+  pinMode(dix, OUTPUT);
+  pinMode(stex, OUTPUT);
+  pinMode(diy, OUTPUT);
+  pinMode(stey, OUTPUT);
+  pinMode(dir, OUTPUT);
+  pinMode(ster, OUTPUT);
+
+}
+// BEFORE RUNNING, CENTER THE PLOTTER IN THE MIDDLE- IF NOT, IT MIGHT OVER TRAVEL!
+void loop() {
+ // Drawing a car bus thing
+ /* yrun(-48, 0);
+  * xrun(-76, 0);
+  * circle(26, 30, 6.2813, 0);
+  * circle(40, 30, 3.14, 0);
+  * xrun(164, 0) ;
+  * circle(26, 30, 6.2813, 0);
+  * cirle( 40, 30, 3.14, 0);
+  * xrun(-34, 0);
+  * xrun(-96, 1);
+  * xrun(-168, 0);
+  * yrun(64, 1);
+  * xrun(-65, 0);
+  * yrun(-48, 0);
+  * circle(52, 30, 0.9599, 0.61);
+  * line(112, 12);
+  * yrun(-48, 0);
+  * xrun(-24, 0);
+  * circle(36, 30, .785, 1.57);
+  * yrun(-36, 1);
+  * yrun(68, 0)
+  * circle(32, 30, .785, 4.712);
+  * xrun(24, 0)
+  * yrun(-24, 1);
+  * xrun(48, 1);
+  * yrun(24, 1)
+  * xrun(8, 0);
+  * yrun(-24, 1);
+  * xrun(48, 1); 
+  * yrun(24, 0);
+  * xrun(8, 0);
+  * line(48, -24);
+  * xrun(-48, 1);
+  * xrun(-32, 0)
+  * circle(36, 30, 1.39, .872)
+  * yrun(-24, 0);
+  * xrun(-32, 0);
+  * circle(36, 30, 1.39, .872);
+  */
+ 
+}
+
+  void xrun(int stexn, int ms) {
+    // OVER TRAVEL PROTECTION
+    gcsx += stexn ; 
+    if (gcsx < overx){ 
+ 
+      if (ms == 1){
+        digitalWrite(13, HIGH);
+      }
+        else {
+          digitalWrite(13, LOW);
+        }
+      if ( 0 < stexn){
+      digitalWrite(dix, HIGH); 
+      } 
+      if (0 > stexn){
+        digitalWrite(dix, LOW);
+       }
+      while (x < abs(stexn)){
+        digitalWrite(stex, HIGH); 
+        delayMicroseconds(sped);
+        digitalWrite(stex, LOW);
+        delayMicroseconds(sped);
+        x++;
+      }
+     x = 0;
+    gcsx += stexn ;
+     }
+}
+
+ void yrun(int steyn, int ms) {
+  gcsy += steyn ;
+ if (gcsy < overy) {
+    if (ms == 1){
+      digitalWrite(13, HIGH);
+    }
+    if ( 0 < steyn){
+    digitalWrite(diy, HIGH); 
+    } 
+    if (0 > steyn){
+       digitalWrite(diy, LOW);
+      }
+    while (y < abs(steyn)){
+      digitalWrite(stey, HIGH); 
+      delay(sped);
+      digitalWrite(stey, LOW);
+      delay(sped);
+      y++ ;
+    }
+    y = 0;
+    
+ }
+}
+
+void rrun(int stern) {
+  // CAN'T OVER TRAVEL A CIRCLE
+    if ( 0 < stern){
+    digitalWrite(dir, HIGH); 
+    } 
+    if (0 > stern){
+       digitalWrite(dir, LOW);
+      }
+    while (r < abs(stern)){
+      digitalWrite(ster, HIGH); 
+      delay(sped);
+      digitalWrite(ster, LOW);
+      delay(sped);
+      r++ ;
+    }
+    r = 0 ;
+}
+
+  void rectangle(int x, int y) {
+    xrun(x, 1);
+    yrun(y, 1);
+    xrun(-x, 1);
+    yrun(-y, 1);
+}
+
+  void line(int x, int y) { 
+    int rat = (x / abs(x))*abs(x / (y + 1));
+    int lin = 0;
+    while (lin < rat){
+      xrun(rat, 1);
+      yrun(y / abs(y), 1);
+      lin++ ;
+    }
+   
+    Serial.print(gcsx);
+    Serial.print(gcsy);
+  }
+// meh, idk how it works when the rat is not an integer
+// should have a microstepping mode
+
+  void circle(int r, int reso, int arc, double ang) {
+    // reso should be fairly large
+   double angp = 6.2831 / reso ;
+   int sing = sin(ang) ;
+   int cosg = cos(ang) ;
+
+   while (ang < arc) {
+      // First, move the plotter from the origin
+      xrun(r, 1) ; 
+      // Next, draw a circle
+      yrun(sing, 1) ; 
+      xrun(cosg, 1) ;
+      ang += angp  ;
+   }
+  ang = 0 ; 
+  }
